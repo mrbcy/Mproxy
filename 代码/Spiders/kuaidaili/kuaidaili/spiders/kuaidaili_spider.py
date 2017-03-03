@@ -65,6 +65,7 @@ class KuaidailiSpider(scrapy.spiders.Spider):
                 item['type'] = tr_selector.xpath('''./td[4]/text()''').extract_first()
                 item['location'] = tr_selector.xpath('''./td[6]/text()''').extract_first()
                 item['task_id'] = str(uuid.uuid4())
+                item['spider_name'] = self.name
 
                 yield item
         except Exception as e:

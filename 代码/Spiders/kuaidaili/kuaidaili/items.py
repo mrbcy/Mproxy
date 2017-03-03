@@ -15,4 +15,5 @@ class KuaidailiItem(scrapy.Item):
     anonymity = scrapy.Field()
     type = scrapy.Field()
     location = scrapy.Field()
+    spider_name = scrapy.Field()
 
