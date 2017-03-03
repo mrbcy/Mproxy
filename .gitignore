@@ -94,3 +94,4 @@ ENV/
 # Rope project settings
 .ropeproject
 技术验证代码/Scrapy/joke/.idea/workspace.xml
+*.xml
