@@ -4,6 +4,9 @@ import uuid
 from logging.handlers import RotatingFileHandler
 
 import sys
+
+from kuaidaili.conf.configloader import ConfigLoader
+
 reload(sys)
 sys.setdefaultencoding('gbk')
 
@@ -20,7 +23,8 @@ class KuaidailiSpider(scrapy.spiders.Spider):
     start_urls = []
 
     def __init__(self):
-        for x in range(10):
+        self.conf_loader = ConfigLoader()
+        for x in range(1):
             self.start_urls.append('http://www.kuaidaili.com/proxylist/%d/' % (x+1))
 
         # self.start_urls.append('http://www.baidu.com')
@@ -35,11 +39,12 @@ class KuaidailiSpider(scrapy.spiders.Spider):
             "Connection": "keep-alive",
             "Upgrade - Insecure - Requests": "1"
         }
+
         self.init_log()
 
     def init_log(self):
         # add log ratate
-        Rthandler = RotatingFileHandler('kuaidaili_spider.log', maxBytes=10 * 1024 * 1024, backupCount=100,encoding = "gbk")
+        Rthandler = RotatingFileHandler(self.conf_loader.get_log_file_name(), maxBytes=10 * 1024 * 1024, backupCount=100,encoding = "gbk")
         Rthandler.setLevel(logging.INFO)
         formatter = logging.Formatter('%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s')
         Rthandler.setFormatter(formatter)

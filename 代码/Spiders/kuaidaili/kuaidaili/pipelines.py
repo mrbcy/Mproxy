@@ -8,6 +8,9 @@ import json
 import logging
 from kafka import KafkaProducer
 
+from kuaidaili.conf.configloader import ConfigLoader
+from kuaidaili.proxyrecord.recorder import KuaidailiProxyRecorder
+
 
 class KuaidailiPipeline(object):
     def process_item(self, item, spider):
@@ -16,8 +19,11 @@ class KuaidailiPipeline(object):
 
 class KuaidailiKafkaPipeline(object):
     def __init__(self):
+        self.conf_loader = ConfigLoader()
         self.producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('utf-8'),
-                                     bootstrap_servers=['amaster:9092', 'anode1:9092', 'anode2:9092'])
+                                     bootstrap_servers=self.conf_loader.get_kafka_bootstrap_servers())
+                                     # bootstrap_servers=['amaster:9092', 'anode1:9092', 'anode2:9092'])
+        self.proxy_recorder = KuaidailiProxyRecorder(mongodb_host=self.conf_loader.get_mongodb_host())
 
     def __del__(self):
         if self.producer is not None:
@@ -27,7 +33,12 @@ class KuaidailiKafkaPipeline(object):
         try:
             log_msg = "Get a proxy[%(ip)s\t%(port)s\t%(anonymity)s\t%(type)s\t%(location)s]. Task Id is:%(task_id)s" % item
             logging.info(log_msg)
-            self.producer.send('unchecked-servers', item.__dict__)  # Makes the item could be JSON serializable
+            if self.proxy_recorder.find_repeat_proxy(item['ip']) is None:
+                logging.debug(item['ip'] + ' is not repeat')
+                self.producer.send('unchecked-servers', item.__dict__)  # Makes the item could be JSON serializable
+                self.proxy_recorder.save_proxy(item)
+            else:
+                logging.debug(item['ip'] + ' is repeat, not submit to Kafka cluster')
 
         except Exception as e:
             logging.exception("An Error Happens")
