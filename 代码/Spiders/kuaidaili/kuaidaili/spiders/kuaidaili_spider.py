@@ -24,7 +24,7 @@ class KuaidailiSpider(scrapy.spiders.Spider):
 
     def __init__(self):
         self.conf_loader = ConfigLoader()
-        for x in range(1):
+        for x in range(10):
             self.start_urls.append('http://www.kuaidaili.com/proxylist/%d/' % (x+1))
 
         # self.start_urls.append('http://www.baidu.com')
