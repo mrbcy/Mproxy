@@ -6,6 +6,8 @@ import threading
 import requests
 import time
 
+from conf.configloader import ConfigLoader
+
 
 class ProxyValidator(threading.Thread):
     def __init__(self, queue, submit_util):
@@ -14,6 +16,7 @@ class ProxyValidator(threading.Thread):
         self.submit_util = submit_util
         self.is_working = False
         self.is_finish = False
+        self.config_loader = ConfigLoader()
 
     def is_finish(self):
         return self.is_finish
@@ -32,6 +35,7 @@ class ProxyValidator(threading.Thread):
             self.is_finish = True
             return
         self.proxy_item = proxy_item
+        self.proxy_item['validator_name'] = self.config_loader.get_validator_name()
         self.valid_proxy()
 
     def valid_proxy(self):
@@ -52,15 +56,19 @@ class ProxyValidator(threading.Thread):
             regex = """050897"""
             pattern = re.compile(regex)
             if re.search(pattern=pattern, string=res.text) is not None and time_consume <= 5:
+                self.proxy_item['validate_result'] = True
                 logging.info("proxy %s:%s is available, costs %f s" % (self.proxy_item['ip'],self.proxy_item['port'],time_consume))
-                self.submit_util.send_msg(self.proxy_item)
+
             else:
+                self.proxy_item['validate_result'] = False
                 logging.info("proxy %s:%s is unavailable, costs %f s" % (self.proxy_item['ip'], self.proxy_item['port'],time_consume))
 
         except Exception as e:
+            self.proxy_item['validate_result'] = False
             logging.info("proxy %s:%s is unavailable, exception catch %s" % (self.proxy_item['ip'], self.proxy_item['port'],e.message))
 
         finally:
+            self.submit_util.send_msg(self.proxy_item)
             self.is_finish = True
 
 

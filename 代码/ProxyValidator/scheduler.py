@@ -3,6 +3,7 @@ import logging
 import time
 from logging.handlers import RotatingFileHandler
 
+from conf.configloader import ConfigLoader
 from kafkaproxylistener import KafkaProxyListener
 from util.kafkaproxysubmitutil import KafkaProxySubmitUtil
 from util.proxyqueue import ProxyQueue
@@ -29,27 +30,16 @@ if __name__ == '__main__':
     logger = logging.getLogger()
     validator_num = 10
     validators = []
-    logging.debug('ahahah')
 
     queue = ProxyQueue()
-    # queue.add_proxy({'ip':'182.254.129.123','port':'80'})
-    # queue.add_proxy({'ip':'101.53.101.172','port':'9999'})
-    # queue.add_proxy({'ip':'106.46.136.204','port':'808'})
-    # queue.add_proxy({'ip':'117.90.1.34','port':'9000'})
-    # queue.add_proxy({'ip':'117.90.6.134','port':'9000'})
-    # queue.add_proxy({'ip':'125.123.76.134','port':'8998'})
-    # queue.add_proxy({'ip':'125.67.75.53','port':'9000'})
-    # queue.add_proxy({'ip':'115.28.169.160','port':'8118'})
-    # queue.add_proxy({'ip':'117.90.1.35','port':'9000'})
-    # queue.add_proxy({'ip':'111.72.126.161','port':'808'})
-    # queue.add_proxy({'ip':'121.232.148.94','port':'9000'})
-    # queue.add_proxy({'ip':'117.90.7.106','port':'9000'})
+
+    config_loader = ConfigLoader()
 
     proxy_listener = KafkaProxyListener(queue=queue)
     proxy_listener.start()
 
     available_proxies = ProxyQueue()
-    submit_util = KafkaProxySubmitUtil(bootstrap_server=['amaster:9092','anode1:9092','anode2:9092'])
+    submit_util = KafkaProxySubmitUtil(bootstrap_server=config_loader.get_kafka_bootstrap_servers())
 
     for i in xrange(validator_num):
         validators.append(ProxyValidator(queue=queue, submit_util=submit_util))

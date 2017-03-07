@@ -6,6 +6,9 @@ import threading
 
 from kafka import KafkaConsumer
 
+from conf.configloader import ConfigLoader
+
+
 def _async_raise(tid, exctype):
     '''Raises an exception in the threads with id tid'''
     if not inspect.isclass(exctype):
@@ -25,6 +28,7 @@ class KafkaProxyListener(threading.Thread):
     def __init__(self,queue):
         threading.Thread.__init__(self)
         self.queue = queue
+        self.config_loader = ConfigLoader()
 
     def _get_my_tid(self):
         """determines this (self's) thread id
@@ -77,8 +81,8 @@ class KafkaProxyListener(threading.Thread):
 
     def run(self):
         consumer = KafkaConsumer('unchecked-servers',
-                                 group_id='test-gdrou1p',
-                                 bootstrap_servers=['amaster:9092','anode1:9092','anode2:9092'],
+                                 group_id='test-gdrodu1p',
+                                 bootstrap_servers=self.config_loader.get_kafka_bootstrap_servers(),
                                  auto_offset_reset='earliest', enable_auto_commit=False,
                                  value_deserializer=lambda m: json.loads(m.decode('utf-8')))
 
