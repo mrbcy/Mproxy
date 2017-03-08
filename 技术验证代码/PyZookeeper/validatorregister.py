@@ -14,7 +14,7 @@ class InfoKeeper(threading.Thread):
         if self.register.zk_node is None:
             print "create method has not been called"
             return
-        check_result = self.register.zk.exists(self.register.validator_path)
+        check_result = self.register.zk.exists(self.register.zk_node)
         if check_result is None:
             # redo the regist
             print "redo the regist"
@@ -35,9 +35,10 @@ class ValidatorRegister:
         self.zk.close()
 
     def regist(self):
-        self.zk_node = self.zk.create(self.validator_path + 'validator',bytes('validator_huabei_1'),ephemeral=True,sequence=True,makepath=True)
+        self.zk_node = self.zk.create(self.validator_path + 'validator',bytes('validator_huabei_test_1'),ephemeral=True,sequence=True,makepath=True)
 
     def close(self):
+        self.zk.stop()
         self.zk.close()
 
     def conn_state_watcher(self, state):
@@ -58,3 +59,4 @@ class ValidatorRegister:
 if __name__ == '__main__':
     register = ValidatorRegister()
     register.regist()
+    time.sleep(200)
