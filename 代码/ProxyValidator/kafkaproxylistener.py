@@ -81,7 +81,7 @@ class KafkaProxyListener(threading.Thread):
 
     def run(self):
         consumer = KafkaConsumer('unchecked-servers',
-                                 group_id='test-gdrodu1p',
+                                 group_id=self.config_loader.get_validator_name(),
                                  bootstrap_servers=self.config_loader.get_kafka_bootstrap_servers(),
                                  auto_offset_reset='earliest', enable_auto_commit=False,
                                  value_deserializer=lambda m: json.loads(m.decode('utf-8')))

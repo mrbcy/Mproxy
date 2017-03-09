@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 import time
+import traceback
 
 from conf.configloader import ConfigLoader
 from zkutil.nodedetector import NodeDetector
@@ -10,6 +11,7 @@ class Dispatcher:
 
     def __init__(self):
         self.conf_loader = ConfigLoader()
+        self.validator_controller = None
 
 
     def validator_node_change_listener(self,zk,node_path,children):
@@ -44,7 +46,7 @@ class Dispatcher:
                     self.validator_controller.close()
 
         except Exception as e:
-            pass
+            traceback.print_exc()
 
 
     def start_work(self):
