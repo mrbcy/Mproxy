@@ -26,6 +26,7 @@ class KuaidailiSpider(scrapy.spiders.Spider):
         self.conf_loader = ConfigLoader()
         for x in range(10):
             self.start_urls.append('http://www.kuaidaili.com/proxylist/%d/' % (x+1))
+            # self.start_urls.append('http://www.kuaidaili.com/free/inha/%d/' % (x+1))
 
         # self.start_urls.append('http://www.baidu.com')
 
@@ -56,7 +57,9 @@ class KuaidailiSpider(scrapy.spiders.Spider):
 
     def parse(self, response):
         try:
+            """//*[@id="list"]/table/tbody/tr[1]/td[1]"""
             trs = response.xpath('''//*[@id="index_free_list"]/table/tbody/tr''')
+            # trs = response.xpath('''//*[@id="list"]/table/tbody/tr''')
             for tr_selector in trs:
                 item = KuaidailiItem()
                 item['ip'] = tr_selector.xpath('''./td[1]/text()''').extract_first()

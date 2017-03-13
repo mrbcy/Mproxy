@@ -40,22 +40,22 @@ class ProxyValidator(threading.Thread):
 
     def valid_proxy(self):
         headers = {
-            "Host": "www.sogou.com",
+            "Host": "cn.bing.com",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
             "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
             "Accept-Encoding": "gzip, deflate",
-            "Cookie": "CXID=AFB58656EB6137C12D0E4FF12BC6DFFE; SUV=1484628390086037; m=FAB6EC92D3062F7D84CC06636E62F609; ABTEST=0|1486986265|v17; ad=oe45yZllll2Y$gmTlllllVAIWEtlllllJa0oJyllll9lllll9Zlll5@@@@@@@@@@; SUID=B96B30B65412940A00000000586E6482; ld=okllllllll2Y7@v2lllllVA8dw1lllllH0xrAlllll9lllllpZlll5@@@@@@@@@@; YYID=FAB6EC92D3062F7D84CC06636E62F609; SNUID=441BB6B17B7E35AEB86CFBF37CECC35E; usid=Ibgtjb1FmwpmVEd9; IPLOC=CN1101; browerV=8; osV=1",
+            "Cookie": "MUID=0367654CF2046E403DCA6F4DF6046DFC; SRCHD=AF=NOFORM; SRCHUID=V=2&GUID=5C54DB461CC44305BE5560497C7E1932; SRCHUSR=DOB=20170310; _EDGE_S=SID=2CDBF24456B266310767F80557136780; MUIDB=0367654CF2046E403DCA6F4DF6046DFC; WLS=TS=63624706084; _SS=SID=2CDBF24456B266310767F80557136780&bIm=149196&HV=1489109297; SRCHHPGUSR=CW=864&CH=679&DPR=1.25&UTC=480",
             "Connection": "keep-alive",
             "Upgrade - Insecure - Requests": "1"
         }
         try:
             start_time = time.clock()
-            res = requests.get('http://www.sogou.com/', proxies={'http': self.proxy_item['ip']+':'+self.proxy_item['port']}, timeout = 10)
+            res = requests.get('http://cn.bing.com/', proxies={'http': self.proxy_item['ip']+':'+self.proxy_item['port']}, timeout = 20)
             end_time = time.clock()
             time_consume = end_time - start_time
-            regex = """050897"""
+            regex = """10036305"""
             pattern = re.compile(regex)
-            if re.search(pattern=pattern, string=res.text) is not None and time_consume <= 5:
+            if re.search(pattern=pattern, string=res.text) is not None and time_consume <= 20:
                 self.proxy_item['validate_result'] = True
                 logging.info("proxy %s:%s is available, costs %f s" % (self.proxy_item['ip'],self.proxy_item['port'],time_consume))
 
