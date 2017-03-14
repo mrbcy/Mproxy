@@ -40,20 +40,22 @@ class ProxyValidator(threading.Thread):
 
     def valid_proxy(self):
         headers = {
-            "Host": "cn.bing.com",
+            "Host": "blog.csdn.net",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
             "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
             "Accept-Encoding": "gzip, deflate",
-            "Cookie": "MUID=0367654CF2046E403DCA6F4DF6046DFC; SRCHD=AF=NOFORM; SRCHUID=V=2&GUID=5C54DB461CC44305BE5560497C7E1932; SRCHUSR=DOB=20170310; _EDGE_S=SID=2CDBF24456B266310767F80557136780; MUIDB=0367654CF2046E403DCA6F4DF6046DFC; WLS=TS=63624706084; _SS=SID=2CDBF24456B266310767F80557136780&bIm=149196&HV=1489109297; SRCHHPGUSR=CW=864&CH=679&DPR=1.25&UTC=480",
+            # "Cookie": "MUID=0367654CF2046E403DCA6F4DF6046DFC; SRCHD=AF=NOFORM; SRCHUID=V=2&GUID=5C54DB461CC44305BE5560497C7E1932; SRCHUSR=DOB=20170310; _EDGE_S=SID=2CDBF24456B266310767F80557136780; MUIDB=0367654CF2046E403DCA6F4DF6046DFC; WLS=TS=63624706084; _SS=SID=2CDBF24456B266310767F80557136780&bIm=149196&HV=1489109297; SRCHHPGUSR=CW=864&CH=679&DPR=1.25&UTC=480",
             "Connection": "keep-alive",
+            "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.22 Safari/537.36 SE 2.X MetaSr 1.0",
             "Upgrade - Insecure - Requests": "1"
         }
         try:
             start_time = time.clock()
-            res = requests.get('http://cn.bing.com/', proxies={'http': self.proxy_item['ip']+':'+self.proxy_item['port']}, timeout = 20)
+            # res = requests.get('http://blog.csdn.net/mrbcy/article/details/62039845', proxies={'http': self.proxy_item['ip']+':'+self.proxy_item['port']}, timeout = 20)
+            res = requests.get('http://blog.csdn.net/mrbcy/article/details/62039845', timeout = 20,headers=headers)
             end_time = time.clock()
             time_consume = end_time - start_time
-            regex = """10036305"""
+            regex = """mrbcy"""
             pattern = re.compile(regex)
             if re.search(pattern=pattern, string=res.text) is not None and time_consume <= 20:
                 self.proxy_item['validate_result'] = True
@@ -70,3 +72,36 @@ class ProxyValidator(threading.Thread):
         finally:
             self.submit_util.send_msg(self.proxy_item)
             self.is_finish = True
+
+    # if __name__ == "__main__":
+    #     headers = {
+    #         "Host": "blog.csdn.net",
+    #         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    #         "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
+    #         "Accept-Encoding": "gzip, deflate",
+    #         # "Cookie": "MUID=0367654CF2046E403DCA6F4DF6046DFC; SRCHD=AF=NOFORM; SRCHUID=V=2&GUID=5C54DB461CC44305BE5560497C7E1932; SRCHUSR=DOB=20170310; _EDGE_S=SID=2CDBF24456B266310767F80557136780; MUIDB=0367654CF2046E403DCA6F4DF6046DFC; WLS=TS=63624706084; _SS=SID=2CDBF24456B266310767F80557136780&bIm=149196&HV=1489109297; SRCHHPGUSR=CW=864&CH=679&DPR=1.25&UTC=480",
+    #         "Connection": "keep-alive",
+    #         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.22 Safari/537.36 SE 2.X MetaSr 1.0",
+    #         "Upgrade - Insecure - Requests": "1"
+    #     }
+    #     try:
+    #         start_time = time.clock()
+    #         # res = requests.get('http://blog.csdn.net/mrbcy/article/details/62039845', proxies={'http': self.proxy_item['ip']+':'+self.proxy_item['port']}, timeout = 20)
+    #         res = requests.get('http://blog.csdn.net/mrbcy/article/details/62039845', timeout=20, headers=headers)
+    #         print res.text
+    #         end_time = time.clock()
+    #         time_consume = end_time - start_time
+    #         regex = """mrbcy"""
+    #         pattern = re.compile(regex)
+    #         if re.search(pattern=pattern, string=res.text) is not None and time_consume <= 20:
+    #
+    #             print("proxy is available, costs %f s" % (time_consume))
+    #
+    #         else:
+    #
+    #             print("proxy is unavailable, costs %f s" % (time_consume))
+    #
+    #     except Exception as e:
+    #
+    #         print("proxy  is unavailable, exception catch %s" % (e.message))
+
