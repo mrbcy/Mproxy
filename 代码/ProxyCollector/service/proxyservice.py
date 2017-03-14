@@ -29,6 +29,7 @@ class ProxyService:
             dao_item.anonymity = validation_result_item.anonymity
             dao_item.location = validation_result_item.location
             dao_item.type = validation_result_item.type
+            dao_item.create_time = datetime.datetime.now()
             insert_flag = True
 
         if validation_result_item.validate_result == True:

@@ -10,10 +10,11 @@ proxy_dao = ProxyDao()
 def test_insert_proxy():
     global proxy_dao
     dao_item = ProxyDaoItem()
-    dao_item.proxy_addr = "127.0.0.1:5002"
+    dao_item.proxy_addr = "127.0.0.1:5003"
     dao_item.location = "北京 海淀 移动"
     dao_item.status = ProxyStatus.PERMANENT_UNAVAILABLE
     dao_item.anonymity = "高匿名"
+    dao_item.create_time = datetime.datetime.now()
     dao_item.last_available_time = datetime.datetime.now()
     dao_item.last_validate_time = datetime.datetime.now()
     dao_item.retry_count = 0
@@ -34,6 +35,7 @@ def test_update():
     dao_item.anonymity = '透明'
     dao_item.status = ProxyStatus.AVAILABLE
     dao_item.retry_count = 3
+    dao_item.create_time = datetime.datetime.now()
     dao_item.last_available_time = datetime.datetime.now()
     dao_item.last_validate_time = datetime.datetime.now()
     proxy_dao.update_proxy(dao_item)
@@ -41,7 +43,7 @@ def test_update():
 def test_find_proxy_need_to_recheck():
     global  proxy_dao
     now = datetime.datetime.now();
-    timestamp = now - datetime.timedelta(hours=6)
+    timestamp = now - datetime.timedelta(hours=0)
     proxy_items = proxy_dao.find_proxy_need_to_recheck(timestamp)
     print proxy_items
 

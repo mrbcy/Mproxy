@@ -6,6 +6,7 @@ class ProxyDaoItem:
         self.location = None
         self.anonymity = None
         self.type = None
+        self.create_time = None
         self.last_validate_time = None
         self.retry_count = 0
         self.last_available_time = None
