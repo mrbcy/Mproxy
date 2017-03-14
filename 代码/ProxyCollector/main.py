@@ -80,7 +80,7 @@ def func():
     consumer = KafkaConsumer('checked-servers',
                              group_id='mproxy_collector',
                              bootstrap_servers=['amaster:9092','anode1:9092','anode2:9092'],
-                             auto_offset_reset='earliest', enable_auto_commit=False,
+                             # auto_offset_reset='earliest', enable_auto_commit=False,
                              value_deserializer=lambda m: json.loads(m.decode('utf-8')))
 
     for message in consumer:

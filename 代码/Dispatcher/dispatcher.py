@@ -3,6 +3,7 @@ import time
 import traceback
 
 from conf.configloader import ConfigLoader
+from proxyrechecker import ProxyRechecker
 from zkutil.nodedetector import NodeDetector
 from zkutil.noderegister import NodeRegister
 
@@ -50,6 +51,8 @@ class Dispatcher:
 
 
     def start_work(self):
+        self.proxy_rechecker = ProxyRechecker()
+        self.proxy_rechecker.start()
         self.validator_detector = NodeDetector(zkconn_str=self.conf_loader.get_zk_conn_str(),node_path=self.conf_loader.validator_node_path()
                                           ,node_change_listener = self.validator_node_change_listener)
 
