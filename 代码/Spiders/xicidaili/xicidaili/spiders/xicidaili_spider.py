@@ -23,7 +23,7 @@ class XicidailiSpider(scrapy.spiders.Spider):
 
     def __init__(self):
         self.conf_loader = ConfigLoader()
-        for x in range(80):
+        for x in range(10):
             self.start_urls.append('http://www.xicidaili.com/nn/%d' % (x + 1))
 
     def start_requests(self):

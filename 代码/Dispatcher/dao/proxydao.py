@@ -39,7 +39,7 @@ class ProxyDao:
         try:
             conn = PoolUtil.pool.connection()
             cur = conn.cursor()
-            sql = "select * from proxy_list where last_validate_time < %s and status != %s limit 500"
+            sql = "select * from proxy_list where last_validate_time < %s and status != %s order by last_validate_time asc limit 2000"
             count = cur.execute(sql,(timestamp,ProxyStatus.PERMANENT_UNAVAILABLE) )
             proxy_dao_items = None
             if count != 0:

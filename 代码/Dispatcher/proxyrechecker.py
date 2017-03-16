@@ -36,4 +36,4 @@ class ProxyRechecker(threading.Thread):
                     validate_item['_values']['spider_name'] = "mproxy_dispatcher"
                     self.producer.send('unchecked-servers',validate_item)
 
-            time.sleep(60*60*3)
+            time.sleep(60*60)
