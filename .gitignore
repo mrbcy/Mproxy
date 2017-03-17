@@ -95,3 +95,4 @@ ENV/
 .ropeproject
 技术验证代码/Scrapy/joke/.idea/workspace.xml
 *.xml
+代码/Monitor/monitor.cfg

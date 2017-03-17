@@ -6,6 +6,9 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import json
 import logging
+import os
+
+import sys
 from kafka import KafkaProducer
 
 from kuaidaili.conf.configloader import ConfigLoader
@@ -19,11 +22,15 @@ class KuaidailiPipeline(object):
 
 class KuaidailiKafkaPipeline(object):
     def __init__(self):
-        self.conf_loader = ConfigLoader()
-        self.producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('utf-8'),
-                                     bootstrap_servers=self.conf_loader.get_kafka_bootstrap_servers())
-                                     # bootstrap_servers=['amaster:9092', 'anode1:9092', 'anode2:9092'])
-        self.proxy_recorder = KuaidailiProxyRecorder(mongodb_host=self.conf_loader.get_mongodb_host())
+        try:
+            self.conf_loader = ConfigLoader()
+            self.producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('utf-8'),
+                                         bootstrap_servers=self.conf_loader.get_kafka_bootstrap_servers())
+                                         # bootstrap_servers=['amaster:9092', 'anode1:9092', 'anode2:9092'])
+            self.proxy_recorder = KuaidailiProxyRecorder(mongodb_host=self.conf_loader.get_mongodb_host())
+        except Exception as e:
+            logging.exception("An Error Happens")
+            os._exit(-1)
 
     def __del__(self):
         if self.producer is not None:
@@ -42,5 +49,6 @@ class KuaidailiKafkaPipeline(object):
 
         except Exception as e:
             logging.exception("An Error Happens")
+            os._exit(-1)
 
         return item
