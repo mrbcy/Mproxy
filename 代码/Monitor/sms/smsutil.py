@@ -3,6 +3,8 @@ import traceback
 
 import top
 from conf.configloader import ConfigLoader
+from mail.emailutil import EmailUtil
+from sms.tracebackcontainer import TracebackContainer
 
 
 class SmsUtil:
@@ -25,5 +27,8 @@ class SmsUtil:
             resp = req.getResponse()
             print(resp)
         except Exception as e:
-            traceback.print_exc()
+            traceback_container = TracebackContainer()
+            traceback.print_exc(file=traceback_container)
+            sms_content = "%s运行异常：%s，关键参数：%s，请尽快处理" % (system_name,exception_name,key_prompt)
+            EmailUtil.send_email(sms_content, traceback_container.message)
 

@@ -51,3 +51,13 @@ class ConfigLoader:
 
     def get_start_xicidaili_command(self):
         return self.cp.get('os','start_xicidaili_command')
+
+    def get_mail_to_list(self):
+        data = self.cp.get('mail','mail_to_list')
+        return data.split(",")
+
+    def get_mail_username(self):
+        return self.cp.get('mail','username')
+
+    def get_mail_password(self):
+        return self.cp.get('mail','password')
