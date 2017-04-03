@@ -9,16 +9,39 @@ import logging
 import os
 
 import sys
+
+
 from kafka import KafkaProducer
 
 from kuaidaili.conf.configloader import ConfigLoader
 from kuaidaili.proxyrecord.recorder import KuaidailiProxyRecorder
+from kuaidaili.service.recordservice import RecordService
 
 
 class KuaidailiPipeline(object):
     def process_item(self, item, spider):
         return item
 
+class KuaidailiMySQLPipeline(object):
+    def __init__(self):
+        try:
+            self.conf_loader = ConfigLoader()
+            self.record_service = RecordService()
+            self.proxy_recorder = KuaidailiProxyRecorder(mongodb_host=self.conf_loader.get_mongodb_host())
+        except Exception as e:
+            logging.exception("An Error Happens")
+
+    def process_item(self, item, spider):
+        try:
+            log_msg = "Get a proxy record[%(ip)s\t%(port)s\t%(anonymity)s\t%(type)s\t%(location)s]. Task Id is:%(task_id)s" % item
+            logging.info(log_msg)
+            if self.proxy_recorder.find_repeat_proxy(item['ip']) is None:
+                self.record_service.save_record(item)
+                self.proxy_recorder.save_proxy(item)
+        except Exception as e:
+            logging.exception("An Error Happens")
+
+        return item
 
 class KuaidailiKafkaPipeline(object):
     def __init__(self):

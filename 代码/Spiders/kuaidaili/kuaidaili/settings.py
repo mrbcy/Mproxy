@@ -75,7 +75,8 @@ DOWNLOADER_MIDDLEWARES = {
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'kuaidaili.pipelines.KuaidailiPipeline': None,
-   'kuaidaili.pipelines.KuaidailiKafkaPipeline': 300,
+   'kuaidaili.pipelines.KuaidailiKafkaPipeline': None,
+   'kuaidaili.pipelines.KuaidailiMySQLPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -96,3 +96,6 @@ ENV/
 技术验证代码/Scrapy/joke/.idea/workspace.xml
 *.xml
 代码/Monitor/monitor.cfg
+端口扫描程序用法.txt
+代码/Spiders/kuaidaili/kuaidaili_spider.cfg
+代码/Spiders/kuaidaili/kuaidaili_spider.cfg
