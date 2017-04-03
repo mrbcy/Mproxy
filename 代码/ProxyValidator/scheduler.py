@@ -53,7 +53,7 @@ class Scheduler:
     def start_working(self):
 
         self.work_flag = False  # will not do the work unless receive the remote control signal
-        validator_num = 10
+        validator_num = 40
         validators = []
 
         self.queue = ProxyQueue()
