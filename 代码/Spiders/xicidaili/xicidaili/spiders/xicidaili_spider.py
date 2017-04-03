@@ -18,12 +18,12 @@ sys.setdefaultencoding('gbk')
 class XicidailiSpider(scrapy.spiders.Spider):
     name = "xicidaili"
     allowed_domains = ["xicidaili.com"]
-    download_delay = 1
+    download_delay = 4
     start_urls = []
 
     def __init__(self):
         self.conf_loader = ConfigLoader()
-        for x in range(10):
+        for x in range(100):
             self.start_urls.append('http://www.xicidaili.com/nn/%d' % (x + 1))
 
     def start_requests(self):
