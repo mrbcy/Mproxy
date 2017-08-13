@@ -14,6 +14,7 @@ class ProxySegment(Document):
     safety = StringField(max_length=20)
     type = StringField(max_length=20)
     location = StringField(max_length=50)
+    source = StringField()
 
 
 def save_proxy_segments(proxy_list):
@@ -23,7 +24,7 @@ def save_proxy_segments(proxy_list):
             # print(regex_str)
             regex = re.compile(regex_str)
             if len(ProxySegment.objects(ip=regex)) == 0:
-                ProxySegment(ip=p['ip'], port=p['port'], safety=p['safety'], type=p['type'], location=p['location']).save()
+                ProxySegment(ip=p['ip'], port=p['port'], safety=p['safety'], type=p['type'], location=p['location'], source=p['source']).save()
         except Exception:
             traceback.print_exc()
 
