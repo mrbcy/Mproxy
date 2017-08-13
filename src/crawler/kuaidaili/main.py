@@ -5,7 +5,7 @@ import traceback
 import time
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from db_util import *
+from util.db_util import *
 
 
 def get_proxies(pages):
