@@ -14,7 +14,7 @@ def get_proxies(pages):
     base_url = 'http://www.xicidaili.com/nn/'
     driver = webdriver.Chrome()
     driver.set_page_load_timeout(20)
-    for i in range(300, pages):
+    for i in range(880, pages):
         url = base_url + str(i)
         driver.get(url)
         # 提取代理地址
@@ -41,7 +41,7 @@ def get_proxies(pages):
                 traceback.print_exc()
         # print(proxies)
         save_proxy_segments(proxies)
-        sleep_time = random.randint(5, 10)
+        sleep_time = random.randint(1, 2)
         print("保存第 " + str(i) + " 页数据成功, 休息" + str(sleep_time) + "s")
         time.sleep(sleep_time)
     print("save all proxies to mongodb")
